@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using TaskApi.Contracts;
 using TaskApi.Models;
 
@@ -13,10 +14,12 @@ namespace TaskApi.Controllers
     public class TasksController : Controller
     {
         private readonly ITaskRepository _tasks;
+        private readonly ILogger<TasksController> _logger;
 
-        public TasksController(ITaskRepository tasks)
+        public TasksController(ITaskRepository tasks, ILogger<TasksController> logger)
         {
             _tasks = tasks;
+            _logger = logger;
         }
 
         // GET: api/Tasks
@@ -105,6 +108,9 @@ namespace TaskApi.Controllers
             }
 
             await _tasks.DeleteTask(id);
+
+            _logger.LogInformation(100, $"Task {id} was deleted");
+
             return Ok();
         }
 
