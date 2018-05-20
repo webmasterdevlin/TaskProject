@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskApi.Models;
+using TaskApi.Entities;
 
 namespace TaskApi.Data
 {

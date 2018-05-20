@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using TaskApi.Contracts;
-using TaskApi.Models;
+using TaskApi.Dtos;
+using TaskApi.Entities;
+using TaskApi.Helpers;
 
 namespace TaskApi.Controllers
 {
@@ -24,9 +28,27 @@ namespace TaskApi.Controllers
 
         // GET: api/Tasks
         [HttpGet]
-        public IEnumerable<TaskEntity> GetTaskEntity()
+        public IActionResult GetTaskEntity()
         {
-            return _tasks.GetAllTasks();
+            var tasksFromRepo = _tasks.GetAllTasks();
+
+            #region Manual Mapping
+            //            var tasks = new List<TaskDto>();
+            //            foreach (var task in tasksFromRepo)
+            //            {
+            //                tasks.Add(new TaskDto
+            //                {
+            //                    Id = task.Id,
+            //                    Title = task.Title,
+            //                    IsDone = task.IsDone,
+            //                    DaysRemaining = task.DeadLine.GetDeadLine()
+            //                });
+            //            }
+            #endregion
+
+            var tasks = Mapper.Map<IEnumerable<TaskDto>>(tasksFromRepo);
+
+            return new JsonResult(tasks);
         }
 
         // GET: api/Tasks/5

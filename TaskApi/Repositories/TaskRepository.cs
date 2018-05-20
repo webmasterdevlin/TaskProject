@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TaskApi.Contracts;
 using TaskApi.Data;
-using TaskApi.Models;
+using TaskApi.Entities;
 
 namespace TaskApi.Repositories
 {

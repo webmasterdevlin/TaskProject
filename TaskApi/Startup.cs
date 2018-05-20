@@ -11,6 +11,10 @@ using NLog.Extensions.Logging;
 using NSwag.AspNetCore;
 using TaskApi.Contracts;
 using TaskApi.Data;
+using AutoMapper;
+using TaskApi.Dtos;
+using TaskApi.Entities;
+using TaskApi.Helpers;
 using TaskApi.Repositories;
 
 namespace TaskApi
@@ -33,6 +37,8 @@ namespace TaskApi
 
             services.AddDbContext<DataContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DataContext")));
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,6 +101,13 @@ namespace TaskApi
                         Url = "https://example.com/license"
                     };
                 };
+            });
+
+            // AutoMapper
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<TaskEntity, TaskDto>().ForMember(dest => dest.DaysRemaining,
+                    opt => opt.MapFrom(src => src.DeadLine.GetDeadLine()));
             });
 
             app.UseHttpsRedirection();
