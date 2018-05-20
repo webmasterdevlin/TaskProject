@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
 using NLog.Extensions.Logging;
+using NSwag.AspNetCore;
 using TaskApi.Contracts;
 using TaskApi.Data;
-using TaskApi.Models;
 using TaskApi.Repositories;
 
 namespace TaskApi
@@ -47,7 +41,7 @@ namespace TaskApi
             // Logging
             loggerFactory.AddConsole();
             loggerFactory.AddDebug(LogLevel.Information);
-//            loggerFactory.AddProvider(new NLog.Extensions.Logging.NLogLoggerProvider());
+            //            loggerFactory.AddProvider(new NLog.Extensions.Logging.NLogLoggerProvider());
             loggerFactory.AddNLog(); // shortcut of the above
 
             if (env.IsDevelopment())
@@ -62,16 +56,46 @@ namespace TaskApi
                     appBuilder.Run(async context =>
                     {
                         var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
-                        if (exceptionHandlerFeature  != null)
+                        if (exceptionHandlerFeature != null)
                         {
                             var logger = loggerFactory.CreateLogger("Global exception logger");
-                            logger.LogError(500, exceptionHandlerFeature.Error,  exceptionHandlerFeature.Error.Message);
+                            logger.LogError(500, exceptionHandlerFeature.Error, exceptionHandlerFeature.Error.Message);
                         }
                         context.Response.StatusCode = 500;
                         await context.Response.WriteAsync("An unexpected fault happened. Please try again later");
                     });
                 });
             }
+
+            // Enable the Swagger UI middleware and the Swagger generator
+            //            app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly, settings =>
+            //            {
+            //                settings.GeneratorSettings.DefaultPropertyNameHandling =
+            //                    PropertyNameHandling.CamelCase;
+            //            });
+
+            // Register the Swagger generator
+            app.UseSwaggerUi(typeof(Startup).Assembly, settings =>
+            {
+                settings.PostProcess = document =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "Task API";
+                    document.Info.Description = "TaskProject ASP.NET Core web API";
+                    document.Info.TermsOfService = "None";
+                    document.Info.Contact = new NSwag.SwaggerContact
+                    {
+                        Name = "Juan Dela Cruz",
+                        Email = "jdc@gmail.com",
+                        Url = "https://twitter.com/jdc"
+                    };
+                    document.Info.License = new NSwag.SwaggerLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = "https://example.com/license"
+                    };
+                };
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
