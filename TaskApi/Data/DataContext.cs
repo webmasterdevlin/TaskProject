@@ -10,7 +10,7 @@ namespace TaskApi.Data
         {
         }
 
-        public DbSet<TaskEntity> TaskEntity { get; set; }
+        public DbSet<TaskEntity> TaskEntity { get; set; } // Should be Tasks
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

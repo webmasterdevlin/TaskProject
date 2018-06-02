@@ -104,10 +104,12 @@ namespace TaskApi
             });
 
             // AutoMapper
-            Mapper.Initialize(cfg =>
+            Mapper.Initialize(config =>
             {
-                cfg.CreateMap<TaskEntity, TaskDto>().ForMember(dest => dest.DaysRemaining,
-                    opt => opt.MapFrom(src => src.DeadLine.GetDeadLine()));
+                config
+                    .CreateMap<TaskEntity, TaskDto>()
+                    .ForMember(destination => destination.DaysRemaining, option => option
+                    .MapFrom(source => source.DeadLine.GetDeadLine()));
             });
 
             app.UseHttpsRedirection();
