@@ -50,7 +50,7 @@ namespace TaskApi.Controllers
             //            }
             #endregion
 
-            _mapper.Map(tasksFromRepo);
+            var tasks = _mapper.Map<IEnumerable<TaskEntity>, IEnumerable<TaskDto>>(tasksFromRepo);
 
 
             return new JsonResult(tasks);
