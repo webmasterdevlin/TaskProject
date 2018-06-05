@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using TaskApi.Contracts;
-using TaskApi.Dtos;
-using TaskApi.Entities;
+
 using TaskApi.Helpers;
+using TaskApi.Entities;
+using TaskApi.Dtos;
 
 namespace TaskApi.Controllers
 {
@@ -17,12 +18,15 @@ namespace TaskApi.Controllers
     [Route("api/[controller]")]
     public class TasksController : Controller
     {
-        private readonly ITaskRepository _tasks;
-        private readonly ILogger<TasksController> _logger;
 
-        public TasksController(ITaskRepository tasks, ILogger<TasksController> logger)
+        private readonly ILogger<TasksController> _logger;
+        private readonly IMapper _mapper;
+        private ITaskRepository _repo;
+
+        public TasksController(ITaskRepository repo, ILogger<TasksController> logger, IMapper mapper)
         {
-            _tasks = tasks;
+            _repo = repo;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -30,7 +34,7 @@ namespace TaskApi.Controllers
         [HttpGet]
         public IActionResult GetTaskEntity()
         {
-            var tasksFromRepo = _tasks.GetAllTasks();
+            var tasksFromRepo = _repo.GetAllTasks();
 
             #region Manual Mapping
             //            var tasks = new List<TaskDto>();
@@ -46,7 +50,8 @@ namespace TaskApi.Controllers
             //            }
             #endregion
 
-            var tasks = Mapper.Map<IEnumerable<TaskDto>>(tasksFromRepo);
+            _mapper.Map(tasksFromRepo);
+
 
             return new JsonResult(tasks);
         }
@@ -60,7 +65,7 @@ namespace TaskApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var taskEntity = await _tasks.FindTask(id);
+            var taskEntity = await _repo.FindTask(id);
 
             if (taskEntity == null)
             {
@@ -86,7 +91,7 @@ namespace TaskApi.Controllers
 
             try
             {
-                await _tasks.UpdateTask(taskEntity);
+                await _repo.UpdateTask(taskEntity);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -110,7 +115,7 @@ namespace TaskApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _tasks.AddTask(taskEntity);
+            await _repo.AddTask(taskEntity);
 
             return CreatedAtAction("GetTaskEntity", new { id = taskEntity.Id }, taskEntity);
         }
@@ -129,7 +134,7 @@ namespace TaskApi.Controllers
                 return NotFound();
             }
 
-            await _tasks.DeleteTask(id);
+            await _repo.DeleteTask(id);
 
             _logger.LogInformation(100, $"Task {id} was deleted");
 
@@ -138,7 +143,7 @@ namespace TaskApi.Controllers
 
         private async Task<bool> TaskEntityExists(Guid id)
         {
-            return await _tasks.Exists(id);
+            return await _repo.Exists(id);
         }
     }
 }

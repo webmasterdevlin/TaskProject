@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,6 +35,8 @@ namespace TaskApi
             services.AddScoped<ITaskRepository, TaskRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddAutoMapper();
 
             services.AddDbContext<DataContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DataContext")));
@@ -104,13 +107,13 @@ namespace TaskApi
             });
 
             // AutoMapper
-            Mapper.Initialize(config =>
-            {
-                config
-                    .CreateMap<TaskEntity, TaskDto>()
-                    .ForMember(destination => destination.DaysRemaining, option => option
-                    .MapFrom(source => source.DeadLine.GetDeadLine()));
-            });
+            // Mapper.Initialize(config =>
+            // {
+            //     config
+            //         .CreateMap<TaskEntity, TaskDto>()
+            //         .ForMember(destination => destination.DaysRemaining, option => option
+            //         .MapFrom(source => source.DeadLine.GetDeadLine()));
+            // });
 
             app.UseHttpsRedirection();
             app.UseMvc();
