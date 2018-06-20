@@ -15,6 +15,7 @@ using TaskApi.Data;
 using AutoMapper;
 using TaskApi.Dtos;
 using TaskApi.Entities;
+using TaskApi.Extensions;
 using TaskApi.Helpers;
 using TaskApi.Repositories;
 
@@ -41,7 +42,7 @@ namespace TaskApi
             services.AddDbContext<DataContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DataContext")));
 
-           
+            services.ConfigureCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -115,6 +116,7 @@ namespace TaskApi
             //         .MapFrom(source => source.DeadLine.GetDeadLine()));
             // });
 
+            app.UseCors("AllowSpecificOrigin");
             app.UseHttpsRedirection();
             app.UseMvc();
         }
