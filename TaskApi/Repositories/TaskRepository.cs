@@ -19,22 +19,22 @@ namespace TaskApi.Repositories
         }
         public async Task<bool> Exists(Guid id)
         {
-            return await _context.TaskEntity.AnyAsync(e => e.Id == id);
+            return await _context.Tasks.AnyAsync(e => e.Id == id);
         }
 
         public IEnumerable<TaskEntity> GetAllTasks()
         {
-            return _context.TaskEntity;
+            return _context.Tasks;
         }
 
         public async Task<TaskEntity> FindTask(Guid id)
         {
-            return await _context.TaskEntity.FindAsync(id);
+            return await _context.Tasks.FindAsync(id);
         }
 
         public async Task<TaskEntity> AddTask(TaskEntity task)
         {
-            await _context.TaskEntity.AddAsync(task);
+            await _context.Tasks.AddAsync(task);
             await _context.SaveChangesAsync();
             return task;
         }
@@ -48,8 +48,8 @@ namespace TaskApi.Repositories
 
         public async Task<TaskEntity> DeleteTask(Guid id)
         {
-            var task = await _context.TaskEntity.SingleOrDefaultAsync(e => e.Id == id);
-            _context.TaskEntity.Remove(task);
+            var task = await _context.Tasks.SingleOrDefaultAsync(e => e.Id == id);
+            _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
             return task;
         }

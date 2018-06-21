@@ -15,7 +15,7 @@ namespace TaskApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.0-rc1-32029")
+                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -34,7 +34,7 @@ namespace TaskApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaskEntity");
+                    b.ToTable("Tasks");
                 });
 #pragma warning restore 612, 618
         }

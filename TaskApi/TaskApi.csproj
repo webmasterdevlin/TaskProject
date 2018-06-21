@@ -1,13 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Remove="nlog.config" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="obj\Debug\netcoreapp2.1\TaskApi.AssemblyInfo.cs" />
     <Compile Include="obj\Debug\netcoreapp2.1\TaskApi.RazorAssemblyInfo.cs" />
@@ -15,18 +12,13 @@
     <Compile Include="obj\Debug\netcoreapp2.1\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\netcoreapp2.1\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="obj\Debug\netcoreapp2.1\TaskApi.csproj.FileListAbsolute.txt" />
     <Content Include="obj\project.assets.json" />
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="Filters\" />
-    <Folder Include="Infrastructure\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -43,7 +35,6 @@
     <None Include="obj\TaskApi.csproj.nuget.g.props" />
     <None Include="obj\TaskApi.csproj.nuget.g.targets" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -53,5 +44,4 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.5.4" />
     <PackageReference Include="NSwag.AspNetCore" Version="11.17.12" />
   </ItemGroup>
-
 </Project>
