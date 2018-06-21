@@ -16,12 +16,13 @@ namespace TaskApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
+    [ApiController]
     public class TasksController : Controller
     {
 
         private readonly ILogger<TasksController> _logger;
         private readonly IMapper _mapper;
-        private ITaskRepository _repo;
+        private readonly ITaskRepository _repo;
 
         public TasksController(ITaskRepository repo, ILogger<TasksController> logger, IMapper mapper)
         {
@@ -60,10 +61,10 @@ namespace TaskApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTaskEntity([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+//            if (!ModelState.IsValid)
+//            {
+//                return BadRequest(ModelState);
+//            }
 
             var taskEntity = await _repo.FindTask(id);
 
@@ -79,11 +80,6 @@ namespace TaskApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTaskEntity([FromRoute] Guid id, [FromBody] TaskEntity taskEntity)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (id != taskEntity.Id)
             {
                 return BadRequest();
@@ -110,11 +106,6 @@ namespace TaskApi.Controllers
         [HttpPost]
         public async Task<IActionResult> PostTaskEntity([FromBody] TaskEntity taskEntity)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             await _repo.AddTask(taskEntity);
 
             return CreatedAtAction("GetTaskEntity", new { id = taskEntity.Id }, taskEntity);
