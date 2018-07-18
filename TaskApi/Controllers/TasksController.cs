@@ -80,6 +80,10 @@ namespace TaskApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTaskEntity([FromRoute] Guid id, [FromBody] TaskEntity taskEntity)
         {
+//            if (!ModelState.IsValid)
+//            {
+//                return BadRequest(ModelState);
+//            }
             if (id != taskEntity.Id)
             {
                 return BadRequest();
@@ -106,6 +110,11 @@ namespace TaskApi.Controllers
         [HttpPost]
         public async Task<IActionResult> PostTaskEntity([FromBody] TaskEntity taskEntity)
         {
+//            if (!ModelState.IsValid)
+//            {
+//                return BadRequest(ModelState);
+//            }
+
             await _repo.AddTask(taskEntity);
 
             return CreatedAtAction("GetTaskEntity", new { id = taskEntity.Id }, taskEntity);
@@ -115,10 +124,10 @@ namespace TaskApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTaskEntity([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            // if (!ModelState.IsValid)
+            // {
+            //     return BadRequest(ModelState);
+            // }
 
             if (!await TaskEntityExists(id))
             {

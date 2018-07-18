@@ -42,7 +42,7 @@ namespace TaskApi
             services.AddDbContext<DataContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DataContext")));
 
-            services.ConfigureCors();
+            services.ConfigureCors(); // TODO: Fix me for NSWAG
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,7 +116,7 @@ namespace TaskApi
             //         .MapFrom(source => source.DeadLine.GetDeadLine()));
             // });
 
-            app.UseCors("AllowSpecificOrigin");
+            app.UseCors("AllowSpecificOrigin"); // TODO: Fix me for NSWAG
             app.UseHttpsRedirection();
             app.UseMvc();
         }
